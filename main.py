@@ -1,3 +1,4 @@
+import os
 from modules.tempo_detector import TempoDetector
 from modules.guitarpro_file_creator import GuitarProFileCreator
 
@@ -8,6 +9,11 @@ class Main:
         self.output_file = output_file
 
     def run(self):
+        # Создаем папку output, если ее не существует
+        output_dir = 'output'
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
         # Определяем темп
         tempo_detector = TempoDetector(self.audio_file)
         tempo = tempo_detector.detect_tempo()
