@@ -21,6 +21,10 @@ class Main:
         if tempo is not None:
             # Создаем файл Guitar Pro с этим темпом
             gp_creator = GuitarProFileCreator(tempo)
+            gp_creator.set_track_name("Rhythm Guitar")  # Устанавливаем имя дорожки
+            print("Атрибуты дорожки перед сохранением:")
+            for attribute, value in gp_creator.track.__dict__.items():
+                print(f"{attribute}: {value}")  # Для проверки имени дорожки
             gp_creator.create_file(self.output_file)
         else:
             print("Не удалось определить темп. Файл Guitar Pro не был создан.")
