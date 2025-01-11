@@ -1,17 +1,19 @@
 import librosa
+import librosa.display
 import numpy as np
 
 
-class TempoDetector:
+class AudioFile:
     def __init__(self, audio_file):
         self.audio_file = audio_file
         self.tempo = None
+        self.duration = None
+        self.chords = None
 
     def detect_tempo(self):
         """
         Определяет темп (BPM) аудиофайла.
 
-        :param audio_file: Путь к аудиофайлу
         :return: Темп в BPM
         """
         try:
@@ -27,6 +29,23 @@ class TempoDetector:
 
             self.tempo = tempo
             return tempo
+        except Exception as e:
+            print(f"Ошибка при обработке файла: {e}")
+            return None
+
+    def detect_duration(self):
+        """
+        Определяет длительность аудиофайла в секундах.
+
+        :return: Длительность в секундах
+        """
+        try:
+            # Загрузка аудиофайла
+            y, sr = librosa.load(self.audio_file)
+
+            # Вычисление длительности
+            self.duration = librosa.get_duration(y=y, sr=sr)
+            return self.duration
         except Exception as e:
             print(f"Ошибка при обработке файла: {e}")
             return None
