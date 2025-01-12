@@ -1,6 +1,7 @@
 import librosa
 import librosa.display
 import numpy as np
+from math import ceil
 
 
 class AudioFile:
@@ -9,6 +10,7 @@ class AudioFile:
         self.tempo = None
         self.duration = None
         self.chords = None
+        self.measures = None
 
     def detect_tempo(self):
         """
@@ -48,4 +50,37 @@ class AudioFile:
             return self.duration
         except Exception as e:
             print(f"Ошибка при обработке файла: {e}")
+            return None
+
+    def format_duration(self):
+        """
+        Представляет длительность в формате 'минуты:секунды'.
+
+        :return: Строка в формате 'MM:SS'
+        """
+        if self.duration is None:
+            raise ValueError("Длительность не определена.")
+
+        # Преобразуем длительность в минуты и секунды
+        minutes, seconds = divmod(int(self.duration), 60)
+        return f"{minutes:02}:{seconds:02}"
+
+    def calculate_measures(self):
+        """
+        Вычисляет количество тактов, основываясь на длительности трека и темпе.
+
+        :return: Количество тактов
+        """
+        try:
+            if self.tempo is None or self.duration is None:
+                raise ValueError("Темп и/или длительность не определены.")
+
+            # Длительность одного такта в секундах (для стандартного метра 4/4)
+            duration_of_one_measure = 60 / self.tempo * 4  # Метро 4/4, т.е. 4 доли в такте
+
+            # Рассчитываем количество тактов
+            self.measures = ceil(self.duration / duration_of_one_measure)
+            return self.measures
+        except Exception as e:
+            print(f"Ошибка при вычислении количества тактов: {e}")
             return None
