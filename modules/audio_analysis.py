@@ -2,85 +2,51 @@ import librosa
 import librosa.display
 import numpy as np
 from math import ceil
-
+import os
+import logging
 
 class AudioFile:
-    def __init__(self, audio_file):
+    def __init__(self, audio_file: str):
+        if not os.path.exists(audio_file):
+            raise FileNotFoundError(f"Файл {audio_file} не найден.")
         self.audio_file = audio_file
-        self.tempo = None
-        self.duration = None
+        self.tempo: float = None
+        self.duration: float = None
         self.chords = None
-        self.measures = None
+        self.measures: int = None
 
-    def detect_tempo(self):
-        """
-        Определяет темп (BPM) аудиофайла.
-
-        :return: Темп в BPM
-        """
+    def detect_tempo(self) -> float:
         try:
-            # Загрузка аудиофайла
             y, sr = librosa.load(self.audio_file)
-
-            # Определение темпа
             tempo, _ = librosa.beat.beat_track(y=y, sr=sr)
-
-            # Если tempo — массив, извлечь первое значение
-            if isinstance(tempo, (list, tuple, np.ndarray)):
-                tempo = tempo.item()  # Извлекаем скалярное значение
-
-            self.tempo = tempo
-            return tempo
+            self.tempo = float(tempo)
+            return self.tempo
         except Exception as e:
-            print(f"Ошибка при обработке файла: {e}")
-            return None
+            logging.error(f"Ошибка при определении темпа: {e}")
+            raise
 
-    def detect_duration(self):
-        """
-        Определяет длительность аудиофайла в секундах.
-
-        :return: Длительность в секундах
-        """
+    def detect_duration(self) -> float:
         try:
-            # Загрузка аудиофайла
             y, sr = librosa.load(self.audio_file)
-
-            # Вычисление длительности
             self.duration = librosa.get_duration(y=y, sr=sr)
             return self.duration
         except Exception as e:
-            print(f"Ошибка при обработке файла: {e}")
-            return None
+            logging.error(f"Ошибка при определении длительности: {e}")
+            raise
 
-    def format_duration(self):
-        """
-        Представляет длительность в формате 'минуты:секунды'.
-
-        :return: Строка в формате 'MM:SS'
-        """
+    def format_duration(self) -> str:
         if self.duration is None:
             raise ValueError("Длительность не определена.")
-
-        # Преобразуем длительность в минуты и секунды
         minutes, seconds = divmod(int(self.duration), 60)
         return f"{minutes:02}:{seconds:02}"
 
-    def calculate_measures(self):
-        """
-        Вычисляет количество тактов, основываясь на длительности трека и темпе.
-
-        :return: Количество тактов
-        """
+    def calculate_measures(self, beats_per_measure: int = 4) -> int:
+        if self.tempo is None or self.duration is None:
+            raise ValueError("Темп и/или длительность не определены.")
         try:
-            if self.tempo is None or self.duration is None:
-                raise ValueError("Темп и/или длительность не определены.")
-
-            # Длительность одного такта в секундах (для стандартного метра 4/4)
-            duration_of_one_measure = 60 / self.tempo * 4  # Метро 4/4, т.е. 4 доли в такте
-
-            # Рассчитываем количество тактов
+            duration_of_one_measure = 60 / self.tempo * beats_per_measure
             self.measures = ceil(self.duration / duration_of_one_measure)
             return self.measures
         except Exception as e:
-            print(f"Ошибка при вычислении количества тактов: {e}")
-            return None
+            logging.error(f"Ошибка при вычислении количества тактов: {e}")
+            raise
