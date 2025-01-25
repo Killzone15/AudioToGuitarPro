@@ -28,6 +28,9 @@ def main():
     gp_creator = GuitarProFileCreator(tempo)
     gp_creator.set_track_name(track_name)  # Устанавливаем имя дорожки
 
+    # Добавляем нужное количество тактов
+    gp_creator.add_measures(measures)
+
     # Путь к директории и файлу для сохранения
     output_dir = 'output/'
     output_file_path = os.path.join(output_dir, 'chords_track.gp5')

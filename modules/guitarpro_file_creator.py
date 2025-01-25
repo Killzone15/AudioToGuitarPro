@@ -1,5 +1,5 @@
 import guitarpro
-from guitarpro.models import Song, Track
+from guitarpro.models import Song, Track, Measure, MeasureHeader
 
 
 class GuitarProFileCreator:
@@ -34,13 +34,12 @@ class GuitarProFileCreator:
         except Exception as e:
             print(f"Ошибка при создании файла Guitar Pro: {e}")
 
-    @staticmethod
-    def add_measures(track: Track, measure_count: int):
+    def add_measures(self, measure_count: int):
         """
         Добавляет заданное количество тактов в дорожку.
 
-        :param track: Дорожка, куда добавляются такты.
         :param measure_count: Количество добавляемых тактов.
         """
-        for _ in range(measure_count):
-            track.newMeasure()
+        for _ in range(measure_count - 1):  # так как GuitarPro содержит первый такт по умолчанию, отнимем один такт.
+            measure = Measure(self.track, MeasureHeader())  # Создаем новый такт
+            self.track.measures.append(measure)  # Добавляем такт в дорожку

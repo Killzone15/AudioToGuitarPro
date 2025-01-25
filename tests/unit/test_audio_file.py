@@ -1,3 +1,4 @@
+import shutil
 import unittest
 import os
 import logging
@@ -7,6 +8,7 @@ from modules.audio_analysis import AudioFile
 # Настройка логирования
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
+
 
 class TestAudioFile(unittest.TestCase):
     @classmethod
@@ -34,19 +36,32 @@ class TestAudioFile(unittest.TestCase):
 
     def test_calculate_measures(self):
         audio = AudioFile(self.test_audio_file)
-        audio.detect_tempo()  # Получаем темп
-        audio.detect_duration()  # Получаем длительность
+        tempo = audio.detect_tempo()  # Получаем темп
+        duration = audio.detect_duration()  # Получаем длительность
         measures = audio.calculate_measures()
-        logger.info(f"Количество тактов: {measures} тактов")
+        logger.info(f"Темп: {tempo}, Длительность: {duration}, Количество тактов: {measures}")
 
         self.assertIsNotNone(measures, "Количество тактов должно быть вычислено.")
         self.assertGreater(measures, 0, "Количество тактов должно быть положительным числом.")
 
     @classmethod
     def tearDownClass(cls):
+        # Удаление файла
         if os.path.exists(cls.test_audio_file):
             os.remove(cls.test_audio_file)
-        logger.info(f"Тестовый аудиофайл удалён: {cls.test_audio_file}")
+            logger.info(f"Тестовый аудиофайл удалён: {cls.test_audio_file}")
+
+        # Удаление папки, если она пустая
+        audio_dir = os.path.dirname(cls.test_audio_file)
+        if os.path.exists(audio_dir):
+            try:
+                # Попробуем удалить папку, если она пуста
+                os.rmdir(audio_dir)
+                logger.info(f"Папка {audio_dir} успешно удалена.")
+            except OSError:
+                # Если папка не пуста, используем shutil.rmtree для рекурсивного удаления
+                shutil.rmtree(audio_dir)
+                logger.info(f"Папка {audio_dir} удалена с содержимым.")
 
 
 if __name__ == '__main__':

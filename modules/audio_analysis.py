@@ -19,7 +19,7 @@ class AudioFile:
         try:
             y, sr = librosa.load(self.audio_file)
             tempo, _ = librosa.beat.beat_track(y=y, sr=sr)
-            self.tempo = float(tempo)
+            self.tempo = float(tempo.item()) if isinstance(tempo, np.ndarray) else float(tempo)
             return self.tempo
         except Exception as e:
             logging.error(f"Ошибка при определении темпа: {e}")
