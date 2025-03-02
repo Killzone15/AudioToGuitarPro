@@ -5,7 +5,7 @@ from modules.guitarpro_file_creator import GuitarProFileCreator
 
 def main():
     # Путь к аудиофайлу
-    audio_path = 'audio/Frostpunk Theme.mp3'
+    audio_path = 'audio/Slipknot - Psychosocial.mp3'
 
     # Создание объекта AudioFile
     audio = AudioFile(audio_path)
@@ -23,9 +23,19 @@ def main():
     measures = audio.calculate_measures()
     print(f"Количество тактов: {measures}")
 
-    # Создание файла Guitar Pro
+    # Получение метаданных
+    metadata = audio.get_metadata()
+    print(f"Метаданные: {metadata}")
+
+    # Создание файла Guitar Pro с метаданными
     track_name = "Chords"  # Здесь можно задать любое имя трека
-    gp_creator = GuitarProFileCreator(tempo)
+    gp_creator = GuitarProFileCreator(
+        tempo=tempo,
+        title=metadata.get("title"),
+        artist=metadata.get("artist"),
+        album=metadata.get("album")
+    )
+
     gp_creator.set_track_name(track_name)  # Устанавливаем имя дорожки
 
     # Добавляем нужное количество тактов
