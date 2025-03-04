@@ -5,7 +5,7 @@ from modules.guitarpro_file_creator import GuitarProFileCreator
 
 def main():
     # Путь к аудиофайлу
-    audio_path = 'audio/Slipknot - Psychosocial.mp3'
+    audio_path = 'audio/Frostpunk Theme.mp3'
 
     # Создание объекта AudioFile
     audio = AudioFile(audio_path)
@@ -27,13 +27,17 @@ def main():
     metadata = audio.get_metadata()
     print(f"Метаданные: {metadata}")
 
+    # Создаём имя файла Guitar Pro на основе имени аудиофайла
+    audio_filename = os.path.splitext(os.path.basename(audio_path))[0]  # "Frostpunk Theme"
+    gp_filename = f"{audio_filename}.gp5"  # "Frostpunk Theme.gp5"
+
     # Создание файла Guitar Pro с метаданными
     track_name = "Chords"  # Здесь можно задать любое имя трека
     gp_creator = GuitarProFileCreator(
         tempo=tempo,
-        title=metadata.get("title"),
-        artist=metadata.get("artist"),
-        album=metadata.get("album")
+        title=metadata.get("title", audio_filename),  # Если нет title, используем имя файла
+        artist=metadata.get("artist", "Unknown Artist"),
+        album=metadata.get("album", "Unknown Album")
     )
 
     gp_creator.set_track_name(track_name)  # Устанавливаем имя дорожки
@@ -43,7 +47,7 @@ def main():
 
     # Путь к директории и файлу для сохранения
     output_dir = 'output/'
-    output_file_path = os.path.join(output_dir, 'chords_track.gp5')
+    output_file_path = os.path.join(output_dir, gp_filename)  # "output/Frostpunk Theme.gp5"
 
     # Проверка существования директории, создание, если необходимо
     if not os.path.exists(output_dir):
