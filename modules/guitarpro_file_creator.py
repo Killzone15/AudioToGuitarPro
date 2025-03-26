@@ -2,6 +2,12 @@ import guitarpro
 from guitarpro.models import Song, Track, Measure, MeasureHeader
 from unidecode import unidecode
 import re
+import os
+
+
+def transliterate_text(text):
+    """Переводит кириллический текст в латиницу."""
+    return unidecode(text) if text else "Unknown"
 
 
 class GuitarProFileCreator:
@@ -20,13 +26,13 @@ class GuitarProFileCreator:
         """
         self.song = Song()
         self.song.tempo = tempo
-        self.song.title = self.clean_string(title)
-        self.song.artist = self.clean_string(artist)
-        self.song.album = self.clean_string(album)
-        self.song.words = self.clean_string(words)
-        self.song.copyright = self.clean_string(copyright)
-        self.song.tab = self.clean_string(tab)
-        self.song.instructions = self.clean_string(instructions)
+        self.song.title = transliterate_text(title)
+        self.song.artist = transliterate_text(artist)
+        self.song.album = transliterate_text(album)
+        self.song.words = transliterate_text(words)
+        self.song.copyright = transliterate_text(copyright)
+        self.song.tab = transliterate_text(tab)
+        self.song.instructions = transliterate_text(instructions)
 
         # Удаляем стандартную дорожку (если она есть)
         if self.song.tracks:
@@ -44,7 +50,7 @@ class GuitarProFileCreator:
         """
         input_string = input_string or "Unknown"  # Если строка пуста, ставим значение "Unknown"
         input_string = self.remove_invalid_characters(input_string)  # Удаление невалидных символов
-        input_string = unidecode(input_string)  # Транслитерация символов
+        input_string = unidecode(input_string)  # Транслитерация символов (кириллица -> латиница)
         return input_string
 
     def remove_invalid_characters(self, input_string: str) -> str:
@@ -53,15 +59,14 @@ class GuitarProFileCreator:
         :param input_string: Строка для очистки.
         :return: Очищенная строка.
         """
-        # Удаляет все символы, кроме латинских букв, цифр и пробелов
-        return re.sub(r'[^a-zA-Z0-9 ]+', '', input_string)
+        return re.sub(r'[^a-zA-Z0-9 _-]+', '', input_string)  # Оставляем латиницу, цифры, пробелы, "-", "_"
 
     def set_track_name(self, name):
         """
         Устанавливает имя дорожки.
         :param name: Имя дорожки.
         """
-        self.track.name = name
+        self.track.name = self.clean_string(name)  # Применяем очистку строки
 
     def create_file(self, file_path):
         """
@@ -82,6 +87,16 @@ class GuitarProFileCreator:
             measure = Measure(self.track, MeasureHeader())  # Создаем новый такт
             self.track.measures.append(measure)  # Добавляем такт в дорожку
 
+    def generate_filename(self, audio_filename):
+        """
+        Генерирует имя файла Guitar Pro, очищая его от кириллицы и запрещённых символов.
+        :param audio_filename: Имя оригинального аудиофайла.
+        :return: Очищенное имя файла Guitar Pro.
+        """
+        base_name = os.path.splitext(os.path.basename(audio_filename))[0]  # Убираем путь и расширение
+        cleaned_name = self.clean_string(base_name)  # Очищаем от кириллицы
+        return f"{cleaned_name}.gp5"  # Возвращаем имя файла с расширением
+
     def add_instrument(self, instrument):
         """
         Добавляет инструмент в дорожку.
@@ -89,4 +104,3 @@ class GuitarProFileCreator:
         """
         self.track.instrument = instrument
         print(f"Инструмент для дорожки установлен: {instrument}")
-

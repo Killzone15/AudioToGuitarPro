@@ -42,7 +42,7 @@ class TestGuitarProFileCreator(unittest.TestCase):
 
     def test_initialization(self):
         """
-        Проверяем, что конструктор правильно инициализирует объект.
+        Проверяем, что конструктор правильно инициализирует объект
         """
         # Проверяем, что атрибуты song установлены корректно
         self.assertEqual(self.creator.song.tempo, self.tempo, f"Темп должен быть {self.tempo}.")
@@ -56,7 +56,7 @@ class TestGuitarProFileCreator(unittest.TestCase):
 
     def test_string_cleaning_in_constructor(self):
         """
-        Проверяем, что строковые параметры проходят очистку с помощью clean_string.
+        Проверяем, что строковые параметры проходят очистку с помощью clean_string
         """
         # Проверяем, что метод clean_string был вызван и строки были очищены
         self.assertEqual(self.creator.song.title, "Song Title", "Название песни должно быть очищено корректно.")
@@ -70,7 +70,7 @@ class TestGuitarProFileCreator(unittest.TestCase):
 
     def test_clean_string_empty_input(self):
         """
-        Проверяем, что если строка пуста, то она заменяется на "Unknown".
+        Проверяем, что если строка пуста, то она заменяется на "Unknown"
         """
         creator = GuitarProFileCreator(self.tempo, title="", artist="", album="", words="")
         self.assertEqual(creator.song.title, "Unknown",
@@ -83,7 +83,7 @@ class TestGuitarProFileCreator(unittest.TestCase):
 
     def test_remove_invalid_characters(self):
         """
-        Проверяем, что метод remove_invalid_characters удаляет невалидные символы.
+        Проверяем, что метод remove_invalid_characters удаляет невалидные символы
         """
         input_string = "ValidString!@#"
         cleaned_string = self.creator.remove_invalid_characters(input_string)
@@ -91,7 +91,7 @@ class TestGuitarProFileCreator(unittest.TestCase):
 
     def test_create_file(self):
         """
-        Проверяем создание файла gp5.
+        Проверяем создание файла gp5
         """
         file_path = "test_song.gp5"  # Убедитесь, что путь корректный
         try:
@@ -103,7 +103,7 @@ class TestGuitarProFileCreator(unittest.TestCase):
 
     def test_add_measures(self):
         """
-        Проверяем добавление тактов в дорожку.
+        Проверяем добавление тактов в дорожку
         """
         initial_measure_count = len(self.creator.track.measures)
         self.creator.add_measures(4)
@@ -112,7 +112,7 @@ class TestGuitarProFileCreator(unittest.TestCase):
 
     def test_add_instrument(self):
         """
-        Проверяем добавление инструмента в дорожку.
+        Проверяем добавление инструмента в дорожку
         """
         instrument = "Electric Guitar"
         self.creator.add_instrument(instrument)
