@@ -42,6 +42,9 @@ class TestAudioFile(unittest.TestCase):
         logger.info("Метаданные добавлены в тестовый аудиофайл.")
 
     def test_detect_tempo(self):
+        """
+        Проверяем определение темпа
+        """
         audio = AudioFile(self.test_audio_file)
         tempo = audio.detect_tempo()
         logger.info(f"Темп: {tempo} BPM")
@@ -49,6 +52,9 @@ class TestAudioFile(unittest.TestCase):
         self.assertGreater(tempo, 0, "Темп должен быть положительным числом.")
 
     def test_detect_duration(self):
+        """
+        Проверяем определение длительности трека
+        """
         audio = AudioFile(self.test_audio_file)
         duration = audio.detect_duration()
         logger.info(f"Длительность: {duration} секунд")
@@ -56,6 +62,9 @@ class TestAudioFile(unittest.TestCase):
         self.assertGreater(duration, 0, "Длительность должна быть положительным числом.")
 
     def test_calculate_measures(self):
+        """
+        Проверяем вычисления кол-ва тактов
+        """
         audio = AudioFile(self.test_audio_file)
         tempo = audio.detect_tempo()  # Получаем темп
         duration = audio.detect_duration()  # Получаем длительность
@@ -66,6 +75,9 @@ class TestAudioFile(unittest.TestCase):
         self.assertGreater(measures, 0, "Количество тактов должно быть положительным числом.")
 
     def test_get_metadata(self):
+        """
+        Проверяем мета-данные из аудио
+        """
         audio = AudioFile(self.test_audio_file)
         metadata = audio.get_metadata()
         logger.info(f"Метаданные: {metadata}")
