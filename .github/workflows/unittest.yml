@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt  # Если у вас есть список зависимостей
+          # Если у вас есть список зависимостей
 
       - name: Run unittest
         run: python -m unittest discover tests
