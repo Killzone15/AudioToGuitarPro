@@ -1,6 +1,6 @@
 import os
 import logging
-import librosa
+from librosa import load, beat, get_duration
 import numpy as np
 from math import ceil
 from mutagen.mp3 import MP3
@@ -23,8 +23,8 @@ class AudioFile:
     def detect_tempo(self) -> float:
         """Определяет темп аудиофайла."""
         try:
-            y, sr = librosa.load(self.audio_file)
-            tempo, _ = librosa.beat.beat_track(y=y, sr=sr)
+            y, sr = load(self.audio_file)
+            tempo, _ = beat.beat_track(y=y, sr=sr)
             self.tempo = float(tempo.item()) if isinstance(tempo, np.ndarray) else float(tempo)
             return self.tempo
         except Exception as e:
@@ -34,8 +34,8 @@ class AudioFile:
     def detect_duration(self) -> float:
         """Определяет длительность аудиофайла."""
         try:
-            y, sr = librosa.load(self.audio_file)
-            self.duration = librosa.get_duration(y=y, sr=sr)
+            y, sr = load(self.audio_file)
+            self.duration = get_duration(y=y, sr=sr)
             return self.duration
         except Exception as e:
             logging.error(f"Ошибка при определении длительности: {e}")
