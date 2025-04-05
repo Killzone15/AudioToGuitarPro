@@ -5,7 +5,7 @@ import logging
 from pydub.generators import Square
 from mutagen.mp3 import MP3
 from mutagen.id3 import ID3, TIT2, TPE1, TALB
-from modules.audio_analysis import AudioFile
+from src.audiotoguitarpro.audio_analysis import AudioFile
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")

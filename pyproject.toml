@@ -3,91 +3,22 @@ name = "audiotoguitarpro"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Killzone15",email = "killzone15@yandex.ru"}
+    {name = "killone15",email = "killzone15@yandex.ru"}
 ]
 readme = "README.md"
-requires-python = ">=3.10,<4.0"  # Updated line for Python 3.10 or later
+requires-python = ">=3.10"
 dependencies = [
-    "scipy (==1.15.0)",
-    "anyio (==4.9.0)",
-    "attrs (==24.3.0)",
-    "audioread (==3.0.1)",
-    "backports-tarfile (==1.2.0)",
-    "build (==1.2.2.post1)",
-    "cachecontrol (==0.14.2)",
-    "certifi (==2024.12.14)",
-    "cffi (==1.17.1)",
-    "charset-normalizer (==3.4.1)",
-    "cleo (==2.1.0)",
-    "colorama (==0.4.6)",
-    "contourpy (==1.3.1)",
-    "crashtest (==0.4.1)",
-    "cycler (==0.12.1)",
-    "decorator (==5.1.1)",
-    "distlib (==0.3.9)",
-    "dulwich (==0.22.8)",
-    "exceptiongroup (==1.2.2)",
-    "fastjsonschema (==2.21.1)",
-    "ffmpeg (==1.4)",
-    "filelock (==3.18.0)",
-    "findpython (==0.6.3)",
-    "fonttools (==4.55.3)",
-    "h11 (==0.14.0)",
-    "httpcore (==1.0.7)",
-    "httpx (==0.28.1)",
-    "idna (==3.10)",
-    "importlib-metadata (==8.6.1)",
-    "installer (==0.7.0)",
-    "jaraco-classes (==3.4.0)",
-    "jaraco-context (==6.0.1)",
-    "jaraco-functools (==4.1.0)",
-    "joblib (==1.4.2)",
-    "keyring (==25.6.0)",
-    "kiwisolver (==1.4.8)",
-    "lazy-loader (==0.4)",
-    "librosa (==0.10.2.post1)",
-    "llvmlite (==0.43.0)",
-    "matplotlib (==3.10.0)",
-    "more-itertools (==10.6.0)",
-    "msgpack (==1.1.0)",
-    "mutagen (==1.47.0)",
-    "numba (==0.60.0)",
-    "numpy (==2.0.2)",
-    "packaging (==24.2)",
-    "pbs-installer (==2025.3.17)",
-    "pillow (==11.1.0)",
-    "pkginfo (==1.12.1.2)",
-    "platformdirs (==4.3.6)",
-    "poetry (==2.1.2)",
-    "poetry-core (==2.1.2)",
-    "pooch (==1.8.2)",
-    "pychord (==1.2.2)",
-    "pycparser (==2.22)",
-    "pydub (==0.25.1)",
-    "pyguitarpro (==0.9.3)",
-    "pyparsing (==3.2.1)",
-    "pyproject-hooks (==1.2.0)",
-    "python-dateutil (==2.9.0.post0)",
-    "pywin32-ctypes (==0.2.3)",
-    "rapidfuzz (==3.12.2)",
-    "requests (==2.32.3)",
-    "requests-toolbelt (==1.0.0)",
-    "scikit-learn (==1.6.0)",
-    "shellingham (==1.5.4)",
-    "six (==1.17.0)",
-    "sniffio (==1.3.1)",
-    "soundfile (==0.13.0)",
-    "soxr (==0.5.0.post1)",
-    "threadpoolctl (==3.5.0)",
-    "tomli (==2.2.1)",
-    "tomlkit (==0.13.2)",
-    "transliterate (==1.10.2)",
-    "trove-classifiers (==2025.3.19.19)",
-    "typing-extensions (==4.12.2)",
-    "unidecode (==1.3.8)",
-    "urllib3 (==2.3.0)",
-    "virtualenv (==20.29.3)",
-    "zipp (==3.21.0)",
-    "zstandard (==0.23.0)",
+    "pyguitarpro (>=0.9.3,<0.10.0)",
+    "unidecode (>=1.3.8,<2.0.0)",
+    "librosa (>=0.11.0,<0.12.0)",
+    "mutagen (>=1.47.0,<2.0.0)"
 ]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+pydub = "^0.25.1"
 
