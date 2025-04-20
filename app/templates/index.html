@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>AudioToGuitarPro</title>
+  <link href="/static/css/form.css" rel="stylesheet" />
+</head>
+<body>
+  <form id="uploadForm" enctype="multipart/form-data" method="POST">
+    <!-- Кнопка, которая вызывает клик по скрытому полю выбора файла -->
+    <button type="button" class="file-input" onclick="document.getElementById('fileInput').click();">Выбрать файл</button>
+    <input type="file" id="fileInput" class="file-input" name="file" onchange="uploadFile(event)" style="display: none;">
+  </form>
+
+  <div id="responseMessage" style="display: none;">
+    <p id="responseText"></p>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/static/js/choosefile.js"></script>
+</body>
+</html>

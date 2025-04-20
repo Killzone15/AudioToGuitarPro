@@ -1,7 +1,7 @@
 import os
 from unidecode import unidecode
-from src.audiotoguitarpro.audio_analysis import AudioFile
-from src.audiotoguitarpro.guitarpro_file_creator import GuitarProFileCreator
+from app.core.audio_analysis import AudioFile
+from app.core.guitarpro_file_creator import GuitarProFileCreator
 
 
 def get_transliterated_filename(audio_path):

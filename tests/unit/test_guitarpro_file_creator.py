@@ -1,6 +1,6 @@
 import unittest
 import os
-from src.audiotoguitarpro.guitarpro_file_creator import GuitarProFileCreator
+from app.core.guitarpro_file_creator import GuitarProFileCreator
 
 
 class TestGuitarProFileCreator(unittest.TestCase):
