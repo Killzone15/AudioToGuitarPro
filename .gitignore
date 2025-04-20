@@ -2,8 +2,8 @@
 __pycache__/
 .idea/
 .vscode/
-.other/
-.tests/audio/
 *.log
 *.env
 *.gp5
+audio/
+output/
