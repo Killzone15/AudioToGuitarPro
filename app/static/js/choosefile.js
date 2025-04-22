@@ -1,22 +1,33 @@
 function uploadFile(event) {
-    var formData = new FormData();
-    var file = event.target.files[0];
-    formData.append("file", file);
+    const fileInput = event.target;
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
 
-    // Используем jQuery для отправки данных через AJAX
-    $.ajax({
-        url: '/',  // URL для загрузки файла (на сервере Flask)
-        type: 'POST',
-        data: formData,
-        contentType: false,  // важно: не устанавливать content-type
-        processData: false,  // важно: не обрабатывать данные
-        success: function(response) {
-            // Показываем сообщение с результатом
-            $('#responseMessage').show();
-            $('#responseText').text(response);
-        },
-        error: function() {
-            alert("Произошла ошибка при загрузке файла.");
+    fetch("/", {
+        method: "POST",
+        body: formData,
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
         }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const messageDiv = document.getElementById("responseMessage");
+        const responseText = document.getElementById("responseText");
+
+        responseText.innerHTML = data.message;
+        messageDiv.style.display = "block";
+
+        if (data.download_url) {
+            const link = document.createElement("a");
+            link.href = data.download_url;
+            link.innerText = "Скачать Guitar Pro файл";
+            link.style.display = "block";
+            responseText.appendChild(document.createElement("br"));
+            responseText.appendChild(link);
+        }
+    })
+    .catch(error => {
+        console.error("Ошибка при загрузке файла:", error);
     });
 }

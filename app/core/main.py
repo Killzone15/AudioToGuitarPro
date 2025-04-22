@@ -3,16 +3,13 @@ from unidecode import unidecode
 from app.core.audio_analysis import AudioFile
 from app.core.guitarpro_file_creator import GuitarProFileCreator
 
-
 def get_transliterated_filename(audio_path):
     """Возвращает имя файла без расширения, транслитерируя кириллицу в латиницу."""
     base_name = os.path.splitext(os.path.basename(audio_path))[0]  # Получаем имя файла без расширения
     return unidecode(base_name)  # Транслитерация
 
-
-def main():
-    # Путь к аудиофайлу
-    audio_path = 'audio/Frostpunk Theme.mp3'
+'''Main function'''
+def process_audio_file(audio_path):
 
     # Создание объекта AudioFile
     audio = AudioFile(audio_path)
@@ -61,9 +58,7 @@ def main():
         # Сохраняем файл
         gp_creator.create_file(output_file_path)
         print(f"Файл сохранён: {output_file_path}")
+        return output_file_path
     except Exception as e:
         print(f"Ошибка при создании файла: {e}")
-
-
-if __name__ == "__main__":
-    main()
+        return None
