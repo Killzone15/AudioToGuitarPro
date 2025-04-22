@@ -1,22 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>AudioToGuitarPro</title>
-  <link href="/static/css/form.css" rel="stylesheet" />
-</head>
-<body>
-  <form id="uploadForm" enctype="multipart/form-data" method="POST">
-    <!-- Кнопка, которая вызывает клик по скрытому полю выбора файла -->
-    <button type="button" class="file-input" onclick="document.getElementById('fileInput').click();">Выбрать файл</button>
-    <input type="file" id="fileInput" class="file-input" name="file" onchange="uploadFile(event)" style="display: none;">
-  </form>
+{% extends "base.html" %}
 
-  <div id="responseMessage" style="display: none;">
+{% block title %} Audio2GP {% endblock %}
+
+{% block content %}
+<form id="uploadForm" enctype="multipart/form-data" method="POST">
+    <div id="dropZone" class="drop-zone">
+        <!-- Кнопка для выбора файла -->
+        <button type="button" class="file-input" onclick="document.getElementById('fileInput').click();">
+            Выбрать файл
+        </button>
+        <input type="file" id="fileInput" class="file-input" name="file" onchange="uploadFile(event)"
+               style="display: none;">
+        <!-- Drag & Drop зона -->
+        <p>Перетащите файл сюда или нажмите кнопку выше</p>
+    </div>
+</form>
+
+<div id="responseMessage" style="display: none;">
     <p id="responseText"></p>
-  </div>
+</div>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="/static/js/choosefile.js"></script>
-</body>
-</html>
+{% if message %}
+    <p>{{ message }}</p>
+{% endif %}
+
+{% if download_url %}
+    <a href="{{ download_url }}">Скачать Guitar Pro файл</a>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{ url_for('static', filename='js/choosefile.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dropZone.js') }}"></script>
+{% endblock %}
