@@ -1,33 +1,51 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const dropZone = document.getElementById("dropZone");
-  const fileInput = document.getElementById("fileInput");
+import { uploadFileFromSource } from "./fileUploader.js";  // Импортируем функцию
 
-  // Глобальное предотвращение открытия файла в браузере
-  document.addEventListener("dragover", function (e) {
-    e.preventDefault();
-  }, false);
+document.addEventListener("DOMContentLoaded", () => {
+    const dropZone = document.getElementById("dropZone");
+    const fileInput = document.getElementById("fileInput");
 
-  document.addEventListener("drop", function (e) {
-    e.preventDefault();
-  }, false);
+    // Dragover — когда мышка с файлом над зоной
+    dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();  // Нужно для разрешения drop
+        dropZone.classList.add("dragover");
+        console.log("Dragover event triggered on dropZone");
+    });
 
-  dropZone.addEventListener("dragover", function (e) {
-    e.preventDefault();
-    dropZone.classList.add("dragover");
-  });
+    // Dragleave — когда мышка уходит из зоны
+    dropZone.addEventListener("dragleave", () => {
+        dropZone.classList.remove("dragover");
+        console.log("Dragleave event triggered on dropZone");
+    });
 
-  dropZone.addEventListener("dragleave", function () {
-    dropZone.classList.remove("dragover");
-  });
+    // Drop — когда файл сброшен
+    dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.classList.remove("dragover");
+        console.log("Drop event triggered on dropZone");
 
-  dropZone.addEventListener("drop", function (e) {
-    e.preventDefault();
-    dropZone.classList.remove("dragover");
+        const files = e.dataTransfer.files;
+        const items = e.dataTransfer.items;
 
-    if (e.dataTransfer.files.length > 0) {
-      fileInput.files = e.dataTransfer.files;
-      // вручную запускаем функцию обработки
-      uploadFile({ target: fileInput });
-    }
-  });
+        console.log("DataTransfer object:", e.dataTransfer);
+        console.log("Files detected:", files);
+
+        if (files.length > 0) {
+            console.log("Files dropped:", files);
+            uploadFileFromSource(files[0]);  // Загружаем файл
+        } else if (items.length > 0) {
+            console.warn("Файл не был получен, возможно, источник перетаскивания не поддерживается.");
+            alert("⚠️ Файл не распознан. Попробуйте перетащить его из основного окна файлового менеджера.");
+        } else {
+            console.log("No files detected in dropZone");
+        }
+    });
+
+    // Обработка выбора файла через input
+    fileInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            console.log("File selected via input:", file);
+            uploadFileFromSource(file);
+        }
+    });
 });
