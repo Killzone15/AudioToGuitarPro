@@ -1,7 +1,9 @@
-function uploadFile(event) {
-    const fileInput = event.target;
+// fileUploader.js
+function uploadFileFromSource(file) {
     const formData = new FormData();
-    formData.append("file", fileInput.files[0]);
+    formData.append("file", file);
+
+    document.getElementById("spinner").style.display = "block";
 
     fetch("/", {
         method: "POST",
@@ -12,6 +14,8 @@ function uploadFile(event) {
     })
     .then(response => response.json())
     .then(data => {
+        document.getElementById("spinner").style.display = "none";
+
         const messageDiv = document.getElementById("responseMessage");
         const responseText = document.getElementById("responseText");
 
@@ -28,6 +32,9 @@ function uploadFile(event) {
         }
     })
     .catch(error => {
+        document.getElementById("spinner").style.display = "none";
         console.error("Ошибка при загрузке файла:", error);
     });
 }
+
+export { uploadFileFromSource };

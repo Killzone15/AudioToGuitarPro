@@ -6,13 +6,13 @@
 <form id="uploadForm" enctype="multipart/form-data" method="POST">
     <div id="dropZone" class="drop-zone">
         <!-- Кнопка для выбора файла -->
-        <button type="button" class="file-input" onclick="document.getElementById('fileInput').click();">
+        <button type="button" class="file-input" id="chooseFileButton">
             Выбрать файл
         </button>
-        <input type="file" id="fileInput" class="file-input" name="file" onchange="uploadFile(event)"
-               style="display: none;">
+        <input type="file" id="fileInput" class="file-input" name="file" style="display: none;">
         <!-- Drag & Drop зона -->
         <p>Перетащите файл сюда или нажмите кнопку выше</p>
+        <div id="spinner" class="spinner" style="display: none;"></div>
     </div>
 </form>
 
@@ -32,6 +32,6 @@
 
 {% block scripts %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{ url_for('static', filename='js/choosefile.js') }}"></script>
-<script src="{{ url_for('static', filename='js/dropZone.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/chooseFile.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/dropZone.js') }}"></script>
 {% endblock %}
