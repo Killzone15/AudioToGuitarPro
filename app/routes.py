@@ -1,9 +1,11 @@
 from flask import Blueprint, render_template, request, send_from_directory, jsonify
 import os
 import shutil
-from app.core.main import process_audio_file  # Импортируем основную функцию обработки
+from app.core.main import process_audio_file
+from app.core.file_utils import remove_old_files, remove_audio_file_after_analysis
 
 main = Blueprint('main', __name__)
+
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
@@ -12,6 +14,7 @@ def index():
 
     if request.method == 'POST':
         file = request.files.get('file')
+        print(f"\n  Выбран файл {file} \n")
 
         if file:
             filename = file.filename
@@ -24,20 +27,19 @@ def index():
             file.save(file_path)
 
             try:
+                # Попытка обработать файл
                 process_audio_file(file_path)
 
-                output_dir = 'output/'
                 file_name = filename.rsplit('.', 1)[0] + '.gp5'
                 download_url = f"/download/{file_name}"
 
                 message = f"Файл {filename} успешно загружен и обработан!"
+
+                remove_audio_file_after_analysis(file_path, filename, audio_folder)
+
             except Exception as e:
                 message = f"Ошибка при обработке файла: {e}"
-
-            os.remove(file_path)
-
-            if not os.listdir(audio_folder):
-                shutil.rmtree(audio_folder)
+                print(f"Ошибка: {e}")
 
         # Если запрос AJAX (fetch), возвращаем JSON
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -48,6 +50,7 @@ def index():
 
     return render_template('index.html', message=message, download_url=download_url)
 
+
 @main.route('/download/<filename>', methods=['GET'])
 def download_file(filename):
     print(f"Зашли в маршрут для скачивания файла: {filename}")  # Принт на проверку
@@ -57,6 +60,9 @@ def download_file(filename):
 
     # Формируем путь к файлу на основе переданного имени
     output_file_path = os.path.join(output_dir, filename)
+
+    # Удаляем старые файлы, если прошло больше 5 минут
+    remove_old_files('output', max_age=300)  # Удаляем файлы старше 5 минут
 
     # Проверяем существование файла
     if os.path.exists(output_file_path):

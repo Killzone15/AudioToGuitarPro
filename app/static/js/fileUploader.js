@@ -1,5 +1,13 @@
-// fileUploader.js
+let isFileBeingUploaded = false; // Флаг для предотвращения повторной загрузки
+
 function uploadFileFromSource(file) {
+    if (isFileBeingUploaded) {
+        console.log("Файл уже загружается, повторная попытка запрещена.");
+        return; // Если файл уже загружается, ничего не делаем
+    }
+
+    isFileBeingUploaded = true;  // Устанавливаем флаг загрузки
+
     const formData = new FormData();
     formData.append("file", file);
 
@@ -14,6 +22,8 @@ function uploadFileFromSource(file) {
     })
     .then(response => response.json())
     .then(data => {
+        isFileBeingUploaded = false;  // Снимаем флаг после завершения загрузки
+
         document.getElementById("spinner").style.display = "none";
 
         const messageDiv = document.getElementById("responseMessage");
@@ -32,6 +42,7 @@ function uploadFileFromSource(file) {
         }
     })
     .catch(error => {
+        isFileBeingUploaded = false;  // Снимаем флаг в случае ошибки
         document.getElementById("spinner").style.display = "none";
         console.error("Ошибка при загрузке файла:", error);
     });
