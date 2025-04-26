@@ -1,12 +1,9 @@
 import os
-from unidecode import unidecode
+from app.core.file_utils import get_transliterated_filename
 from app.core.audio_analysis import AudioFile
 from app.core.guitarpro_file_creator import GuitarProFileCreator
 
-def get_transliterated_filename(audio_path):
-    """Возвращает имя файла без расширения, транслитерируя кириллицу в латиницу."""
-    base_name = os.path.splitext(os.path.basename(audio_path))[0]  # Получаем имя файла без расширения
-    return unidecode(base_name)  # Транслитерация
+
 
 '''Main function'''
 def process_audio_file(audio_path):

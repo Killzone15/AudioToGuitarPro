@@ -2,7 +2,12 @@
 import os
 import time
 import shutil
+from unidecode import unidecode
 
+def get_transliterated_filename(audio_path):
+    """Возвращает имя файла без расширения, транслитерируя кириллицу в латиницу."""
+    base_name = os.path.splitext(os.path.basename(audio_path))[0]  # Получаем имя файла без расширения
+    return unidecode(base_name)  # Транслитерация
 
 def remove_old_files(directory, max_age=600):
     """Удаляет файлы старше max_age секунд (по умолчанию 10 минут)."""

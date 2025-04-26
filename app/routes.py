@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template, request, send_from_directory, jsonify
 import os
-import shutil
 from app.core.main import process_audio_file
-from app.core.file_utils import remove_old_files, remove_audio_file_after_analysis
+from app.core.file_utils import remove_old_files, remove_audio_file_after_analysis, get_transliterated_filename
 
 main = Blueprint('main', __name__)
 
@@ -30,7 +29,7 @@ def index():
                 # Попытка обработать файл
                 process_audio_file(file_path)
 
-                file_name = filename.rsplit('.', 1)[0] + '.gp5'
+                file_name = get_transliterated_filename(filename.rsplit('.', 1)[0]) + '.gp5'
                 download_url = f"/download/{file_name}"
 
                 message = f"Файл {filename} успешно загружен и обработан!"
