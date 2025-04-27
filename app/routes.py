@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, send_from_directory, jsonify
 import os
 from app.core.main import process_audio_file
-from app.core.file_utils import remove_old_files, remove_audio_file_after_analysis, get_transliterated_filename
+from app.core.file_utils import FileUtils
 
 main = Blueprint('main', __name__)
 
@@ -18,29 +18,31 @@ def index():
         if file:
             filename = file.filename
             audio_folder = os.path.join('app', 'audio')
+            file_utils = FileUtils(audio_path=os.path.join(audio_folder, filename), directory=audio_folder)
 
-            if not os.path.exists(audio_folder):
-                os.makedirs(audio_folder)
+            file_utils.ensure_directory_exists()
 
             file_path = os.path.join(audio_folder, filename)
             file.save(file_path)
 
             try:
-                # Попытка обработать файл
+                # Обработка файла
                 process_audio_file(file_path)
 
-                file_name = get_transliterated_filename(filename.rsplit('.', 1)[0]) + '.gp5'
+                # Используем метод get_transliterated_filename()
+                file_utils_output = FileUtils(audio_path=file_path, directory='output')
+                file_name = file_utils_output.get_transliterated_filename() + '.gp5'
                 download_url = f"/download/{file_name}"
 
                 message = f"Файл {filename} успешно загружен и обработан!"
 
-                remove_audio_file_after_analysis(file_path, filename, audio_folder)
+                file_utils.remove_audio_file_after_analysis(filename, audio_folder)
 
             except Exception as e:
                 message = f"Ошибка при обработке файла: {e}"
                 print(f"Ошибка: {e}")
 
-        # Если запрос AJAX (fetch), возвращаем JSON
+        # Если это AJAX-запрос
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return jsonify({
                 'message': message,
@@ -52,19 +54,18 @@ def index():
 
 @main.route('/download/<filename>', methods=['GET'])
 def download_file(filename):
-    print(f"Зашли в маршрут для скачивания файла: {filename}")  # Принт на проверку
+    print(f"Зашли в маршрут для скачивания файла: {filename}")
 
-    # Получаем абсолютный путь
-    output_dir = os.path.join(os.getcwd(), 'output')  # Абсолютный путь к папке output
-
-    # Формируем путь к файлу на основе переданного имени
+    output_dir = os.path.join(os.getcwd(), 'output')
     output_file_path = os.path.join(output_dir, filename)
 
-    # Удаляем старые файлы, если прошло больше 5 минут
-    remove_old_files('output', max_age=300)  # Удаляем файлы старше 5 минут
+    file_utils = FileUtils(directory=output_dir)
+
+    # Удаляем старые файлы
+    file_utils.remove_old_files(max_age=300)
 
     # Проверяем существование файла
-    if os.path.exists(output_file_path):
+    if file_utils.check_file_exists(output_file_path):
         print(f"Файл для отправки: {output_file_path}")
         print(f"Существует ли файл: {os.path.exists(output_file_path)}")
 
@@ -82,3 +83,4 @@ def download_file(filename):
     else:
         print(f"Файл не найден: {output_file_path}")
         return "Файл не найден", 404
+

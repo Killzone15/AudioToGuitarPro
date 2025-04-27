@@ -1,7 +1,6 @@
-import os
-from app.core.file_utils import get_transliterated_filename
 from app.core.audio_analysis import AudioFile
 from app.core.guitarpro_file_creator import GuitarProFileCreator
+from app.core.file_utils import FileUtils
 
 
 
@@ -37,19 +36,16 @@ def process_audio_file(audio_path):
         album=metadata.get("album")
     )
 
-    gp_creator.set_track_name(track_name)  # Устанавливаем имя дорожки
+    # Устанавливаем имя дорожки
+    gp_creator.set_track_name(track_name)
 
     # Добавляем нужное количество тактов
     gp_creator.add_measures(measures)
 
-    # Формируем корректное имя файла
-    output_dir = 'output/'
-    file_name = get_transliterated_filename(audio_path) + '.gp5'
-    output_file_path = os.path.join(output_dir, file_name)
+    file_utils = FileUtils(audio_path=audio_path, directory='output/')
+    output_file_path = file_utils.prepare_output_path()
+    print("Путь к файлу:" + output_file_path)
 
-    # Проверка существования директории
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
 
     try:
         # Сохраняем файл
