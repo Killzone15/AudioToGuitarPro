@@ -1,0 +1,126 @@
+/* Стили для таблицы скачивания */
+table.data-table2 {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+thead {
+    background-color: #f4f4f4;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    color: #333;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Стили для ячеек с названием файла */
+.dt-file-name-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.format-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.dt-file-name {
+    display: flex;
+    align-items: center;
+}
+
+.dt-file-name span {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Стиль для колонки Статус */
+.dt-col-status .ui-badge {
+    padding: 5px 10px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 4px;
+}
+
+.dt-col-status .ui-badge.text-blue {
+    background-color: #007bff;
+}
+
+/* Стиль для колонки Размер */
+.dt-meta-size {
+    font-size: 13px;
+    color: #888;
+}
+
+/* Стили для кнопки "Скачать" */
+.dt-btn a {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.dt-btn a:hover {
+    background-color: #0056b3;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+    table.data-table2 {
+        font-size: 12px;
+    }
+
+    .dt-file-name span {
+        font-size: 12px;
+    }
+
+    .dt-btn a {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+}
+
+/* Стили для слова "Завершено" в статусе */
+.ui-badge {
+    -webkit-text-size-adjust: 100%; /* Отключаем автоматическое изменение размера шрифта */
+    -webkit-tap-highlight-color: rgba(40,40,40,0); /* Отключаем выделение текста на мобильных устройствах */
+    font-family: Open Sans, Arial, sans-serif; /* Шрифт */
+    user-select: none; /* Запрещаем выделение текста */
+    text-align: center; /* Центрируем текст */
+    box-sizing: border-box; /* Учитываем отступы в расчетах */
+    color: #3bb5e9 !important; /* Цвет текста (синий) */
+    position: relative; /* Позиционирование */
+    display: inline-block; /* Чтобы элемент был в строке */
+    letter-spacing: 0.2px !important; /* Межбуквенный интервал */
+    font-size: 9px !important; /* Размер шрифта */
+    line-height: 13px !important; /* Высота строки */
+    font-weight: 400 !important; /* Толщина шрифта */
+    padding: 2px 6px !important; /* Отступы внутри рамки */
+    text-transform: uppercase; /* Все буквы — заглавные */
+    border: 1px solid #3bb5e9; /* Рамка с цветом */
+    border-radius: 12px; /* Округление углов */
+    vertical-align: middle; /* Выравнивание по вертикали */
+    white-space: nowrap; /* Не переносить текст */
+    background-color: transparent !important; /* Прозрачный фон — важное уточнение! */
+    margin-top: -2px; /* Немного сдвигаем вверх */
+}
+
+
+
